@@ -164,7 +164,7 @@ function HomeSection() {
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
         <StatCard label="Доход за месяц" value="842 300 ₽" sub="+14.2% к прошлому" icon="ArrowDownLeft" delay={0.1} />
         <StatCard label="Расходы" value="215 400 ₽" sub="-3.1% к прошлому" icon="ArrowUpRight" delay={0.2} />
         <StatCard label="Транзакций" value="248" sub="За текущий месяц" icon="Zap" delay={0.3} />
@@ -542,9 +542,9 @@ export default function Index() {
   };
 
   return (
-    <div className="flex min-h-screen" style={{ background: "hsl(220,20%,6%)" }}>
+    <div className="flex min-h-screen w-full" style={{ background: "hsl(220,20%,6%)" }}>
       <Sidebar active={activeSection} onNav={setActiveSection} />
-      <main className="flex-1 overflow-y-auto min-w-0">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden" style={{ minWidth: 0 }}>
         <header className="sticky top-0 z-10 flex items-center justify-between px-8 py-4 border-b border-border" style={{ background: "rgba(14,16,22,0.85)", backdropFilter: "blur(16px)" }}>
           <div className="text-sm text-muted-foreground">
             {new Date().toLocaleDateString("ru-RU", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
