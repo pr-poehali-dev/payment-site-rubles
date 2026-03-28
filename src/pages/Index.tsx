@@ -33,7 +33,7 @@ const CHART_DATA = [
 
 function Sidebar({ active, onNav }: { active: Section; onNav: (s: Section) => void }) {
   return (
-    <aside className="w-64 min-h-screen flex flex-col py-8 px-4 border-r border-border flex-shrink-0" style={{ background: "hsl(220, 20%, 5%)" }}>
+    <aside className="hidden lg:flex w-64 min-h-screen flex-col py-8 px-4 border-r border-border flex-shrink-0" style={{ background: "hsl(220, 20%, 5%)" }}>
       <div className="px-4 mb-10 animate-fade-in">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-lg flex items-center justify-center btn-gold text-sm font-bold">₽</div>
@@ -82,6 +82,33 @@ function Sidebar({ active, onNav }: { active: Section; onNav: (s: Section) => vo
   );
 }
 
+const MOBILE_NAV = [
+  { id: "home", label: "Главная", icon: "LayoutDashboard" },
+  { id: "payments", label: "Платежи", icon: "CreditCard" },
+  { id: "history", label: "История", icon: "Clock" },
+  { id: "analytics", label: "Аналитика", icon: "BarChart3" },
+  { id: "profile", label: "Профиль", icon: "User" },
+] as const;
+
+function MobileNav({ active, onNav }: { active: Section; onNav: (s: Section) => void }) {
+  return (
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around px-2 py-2 border-t border-border" style={{ background: "rgba(10,12,18,0.95)", backdropFilter: "blur(20px)" }}>
+      {MOBILE_NAV.map(item => (
+        <button
+          key={item.id}
+          onClick={() => onNav(item.id as Section)}
+          className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all"
+          style={{ color: active === item.id ? "hsl(43,74%,55%)" : "hsl(220,10%,50%)" }}
+        >
+          <Icon name={item.icon} size={20} fallback="Circle" />
+          <span className="text-[10px] font-medium">{item.label}</span>
+          {active === item.id && <span className="w-1 h-1 rounded-full bg-gold" />}
+        </button>
+      ))}
+    </nav>
+  );
+}
+
 function StatCard({ label, value, sub, icon, delay = 0 }: { label: string; value: string; sub: string; icon: string; delay?: number }) {
   return (
     <div className="card-glow gold-border relative overflow-hidden rounded-2xl p-6 animate-fade-in" style={{ background: "hsl(220,18%,9%)", animationDelay: `${delay}s`, opacity: 0 }}>
@@ -104,38 +131,58 @@ function TransactionTable({ rows }: { rows: typeof TRANSACTIONS }) {
   const statusClass = (s: string) => s === "success" ? "status-success" : s === "pending" ? "status-pending" : "status-failed";
   return (
     <div className="rounded-2xl overflow-hidden gold-border" style={{ background: "hsl(220,18%,9%)" }}>
-      <table className="w-full">
-        <thead>
-          <tr className="border-b border-border">
-            {["ID", "Получатель / Отправитель", "Сумма", "Статус", "Дата"].map(h => (
-              <th key={h} className="text-left px-5 py-3.5 text-xs font-medium text-muted-foreground uppercase tracking-wider">{h}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map(tx => (
-            <tr key={tx.id} className="border-b border-border last:border-0 hover:bg-white/[0.02] transition-colors cursor-pointer">
-              <td className="px-5 py-4 text-xs text-muted-foreground font-mono">{tx.id}</td>
-              <td className="px-5 py-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: tx.type === "income" ? "rgba(34,197,94,0.1)" : "rgba(212,175,55,0.1)" }}>
-                    <Icon name={tx.type === "income" ? "ArrowDownLeft" : "ArrowUpRight"} size={14} fallback="ArrowRight" className={tx.type === "income" ? "text-green-400" : "text-gold"} />
-                  </div>
-                  <span className="text-sm font-medium">{tx.name}</span>
-                </div>
-              </td>
-              <td className="px-5 py-4 text-sm font-semibold" style={{ color: tx.type === "income" ? "hsl(142,60%,55%)" : "hsl(var(--foreground))" }}>{tx.amount} ₽</td>
-              <td className="px-5 py-4">
-                <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusClass(tx.status)}`}>{statusLabel(tx.status)}</span>
-              </td>
-              <td className="px-5 py-4 text-xs text-muted-foreground">
-                <div>{tx.date}</div>
-                <div className="opacity-60">{tx.time}</div>
-              </td>
+      <div className="hidden md:block">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b border-border">
+              {["ID", "Получатель / Отправитель", "Сумма", "Статус", "Дата"].map(h => (
+                <th key={h} className="text-left px-5 py-3.5 text-xs font-medium text-muted-foreground uppercase tracking-wider">{h}</th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map(tx => (
+              <tr key={tx.id} className="border-b border-border last:border-0 hover:bg-white/[0.02] transition-colors cursor-pointer">
+                <td className="px-5 py-4 text-xs text-muted-foreground font-mono">{tx.id}</td>
+                <td className="px-5 py-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: tx.type === "income" ? "rgba(34,197,94,0.1)" : "rgba(212,175,55,0.1)" }}>
+                      <Icon name={tx.type === "income" ? "ArrowDownLeft" : "ArrowUpRight"} size={14} fallback="ArrowRight" className={tx.type === "income" ? "text-green-400" : "text-gold"} />
+                    </div>
+                    <span className="text-sm font-medium">{tx.name}</span>
+                  </div>
+                </td>
+                <td className="px-5 py-4 text-sm font-semibold" style={{ color: tx.type === "income" ? "hsl(142,60%,55%)" : "hsl(var(--foreground))" }}>{tx.amount} ₽</td>
+                <td className="px-5 py-4">
+                  <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusClass(tx.status)}`}>{statusLabel(tx.status)}</span>
+                </td>
+                <td className="px-5 py-4 text-xs text-muted-foreground">
+                  <div>{tx.date}</div>
+                  <div className="opacity-60">{tx.time}</div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {/* Mobile list */}
+      <div className="md:hidden divide-y divide-border">
+        {rows.map(tx => (
+          <div key={tx.id} className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/[0.02] transition-colors">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: tx.type === "income" ? "rgba(34,197,94,0.1)" : "rgba(212,175,55,0.1)" }}>
+              <Icon name={tx.type === "income" ? "ArrowDownLeft" : "ArrowUpRight"} size={15} fallback="ArrowRight" className={tx.type === "income" ? "text-green-400" : "text-gold"} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-medium truncate">{tx.name}</div>
+              <div className="text-xs text-muted-foreground">{tx.date}</div>
+            </div>
+            <div className="text-right flex-shrink-0">
+              <div className="text-sm font-semibold" style={{ color: tx.type === "income" ? "hsl(142,60%,55%)" : "hsl(var(--foreground))" }}>{tx.amount} ₽</div>
+              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusClass(tx.status)}`}>{statusLabel(tx.status)}</span>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -545,25 +592,32 @@ export default function Index() {
     <div className="flex min-h-screen w-full" style={{ background: "hsl(220,20%,6%)" }}>
       <Sidebar active={activeSection} onNav={setActiveSection} />
       <main className="flex-1 overflow-y-auto overflow-x-hidden" style={{ minWidth: 0 }}>
-        <header className="sticky top-0 z-10 flex items-center justify-between px-8 py-4 border-b border-border" style={{ background: "rgba(14,16,22,0.85)", backdropFilter: "blur(16px)" }}>
-          <div className="text-sm text-muted-foreground">
+        {/* Header */}
+        <header className="sticky top-0 z-10 flex items-center justify-between px-4 lg:px-8 py-4 border-b border-border" style={{ background: "rgba(14,16,22,0.92)", backdropFilter: "blur(16px)" }}>
+          {/* Mobile: logo */}
+          <div className="flex items-center gap-2 lg:hidden">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center btn-gold text-sm font-bold">₽</div>
+            <span className="font-display text-lg font-semibold text-gold-gradient">ПейРу</span>
+          </div>
+          {/* Desktop: date */}
+          <div className="hidden lg:block text-sm text-muted-foreground">
             {new Date().toLocaleDateString("ru-RU", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <button className="relative w-9 h-9 rounded-xl flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all">
               <Icon name="Bell" size={17} fallback="AlertCircle" />
               <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-gold" />
             </button>
-            <button className="w-9 h-9 rounded-xl flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all">
-              <Icon name="Settings" size={17} fallback="Sliders" />
-            </button>
             <div className="w-9 h-9 rounded-xl btn-gold flex items-center justify-center text-xs font-bold cursor-pointer">АК</div>
           </div>
         </header>
-        <div className="px-8 py-8">
+        {/* Content */}
+        <div className="px-4 lg:px-8 py-6 pb-24 lg:pb-8">
           {renderSection()}
         </div>
       </main>
+      {/* Mobile bottom nav */}
+      <MobileNav active={activeSection} onNav={setActiveSection} />
     </div>
   );
 }
