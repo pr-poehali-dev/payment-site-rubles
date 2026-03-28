@@ -225,30 +225,6 @@ function HomeSection() {
         </div>
         <TransactionTable rows={TRANSACTIONS.slice(0, 4)} />
       </div>
-
-      {/* Подключение компании */}
-      <div className="relative rounded-2xl p-6 lg:p-8 overflow-hidden animate-fade-in animate-delay-4" style={{ background: "linear-gradient(135deg, hsl(220,18%,10%) 0%, hsl(220,20%,7%) 100%)", border: "1px solid rgba(212,175,55,0.25)", opacity: 0 }}>
-        <div className="absolute inset-0 pointer-events-none opacity-10" style={{ background: "radial-gradient(ellipse at 10% 80%, hsl(43,74%,55%) 0%, transparent 55%)" }} />
-        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center gap-6">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: "rgba(212,175,55,0.15)", border: "1px solid rgba(212,175,55,0.3)" }}>
-            <Icon name="Building2" size={24} fallback="Briefcase" className="text-gold" />
-          </div>
-          <div className="flex-1">
-            <div className="text-xs text-muted-foreground uppercase tracking-widest mb-1">Для бизнеса</div>
-            <h2 className="font-display text-2xl font-medium mb-2">Подключите вашу компанию</h2>
-            <p className="text-sm text-muted-foreground">Автоматические платежи, выставление счётов и управление транзакциями для вашего бизнеса. Напишите нам — подключим за 24 часа.</p>
-          </div>
-          <a
-            href="https://t.me/sexwinds"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-gold flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm font-medium flex-shrink-0 w-full lg:w-auto justify-center"
-          >
-            <Icon name="Send" size={16} fallback="MessageCircle" />
-            Написать в Telegram
-          </a>
-        </div>
-      </div>
     </div>
   );
 }
@@ -259,48 +235,8 @@ function PaymentsSection() {
     <div className="space-y-8 max-w-2xl">
       <div className="animate-fade-in" style={{ opacity: 0 }}>
         <div className="text-xs text-muted-foreground uppercase tracking-widest mb-1">Операции</div>
-        <h1 className="font-display text-4xl font-medium">Платежи</h1>
+        <h1 className="font-display text-4xl font-medium">Новый платёж</h1>
       </div>
-
-      {/* CTA подключения */}
-      <div className="rounded-2xl overflow-hidden animate-fade-in animate-delay-1" style={{ opacity: 0 }}>
-        <div className="relative p-6 lg:p-8" style={{ background: "linear-gradient(135deg, hsl(43,74%,18%) 0%, hsl(220,20%,9%) 100%)", border: "1px solid rgba(212,175,55,0.3)" }}>
-          <div className="absolute top-0 right-0 w-48 h-48 pointer-events-none opacity-5 select-none" style={{ background: "radial-gradient(circle, hsl(43,74%,55%) 0%, transparent 70%)" }} />
-          <div className="flex items-start gap-4 mb-6">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "rgba(212,175,55,0.2)" }}>
-              <Icon name="Zap" size={22} fallback="Star" className="text-gold" />
-            </div>
-            <div>
-              <h2 className="font-display text-2xl font-medium mb-1">Автоматические платежи для вашего бизнеса</h2>
-              <p className="text-sm text-muted-foreground">Подключите компанию и создавайте платежи автоматически через API. Работает 24/7.</p>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
-            {[
-              { icon: "RefreshCw", text: "Автосписания по расписанию" },
-              { icon: "Link", text: "API и вебхуки для интеграции" },
-              { icon: "ShieldCheck", text: "Антифрод и 2FA защита" },
-            ].map(f => (
-              <div key={f.text} className="flex items-center gap-2.5 text-sm text-muted-foreground">
-                <Icon name={f.icon} size={15} fallback="Check" className="text-gold flex-shrink-0" />
-                {f.text}
-              </div>
-            ))}
-          </div>
-          <a
-            href="https://t.me/sexwinds"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-gold inline-flex items-center gap-2.5 px-7 py-3 rounded-xl text-sm font-semibold"
-          >
-            <Icon name="Send" size={15} fallback="MessageCircle" />
-            Подключить компанию в Telegram
-          </a>
-          <div className="mt-3 text-xs text-muted-foreground">Пишите <span className="text-gold font-medium">@sexwinds</span> — подключим за 24 часа</div>
-        </div>
-      </div>
-
-      <div className="divider-text animate-fade-in animate-delay-2" style={{ opacity: 0 }}>Или создать разовый платёж</div>
       <div className="flex items-center gap-2 animate-fade-in animate-delay-1" style={{ opacity: 0 }}>
         {["Получатель", "Сумма", "Подтверждение"].map((s, i) => (
           <div key={s} className="flex items-center gap-2">
